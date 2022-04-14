@@ -58,21 +58,23 @@ export interface IPlayerContext {
   videoId?: string
   videoName?: string
   status?: YT.PlayerState
-  currentTime?: number
-  duration?: number
+  currTime: number
+  totalTime: number
+  progress: number
   volumn?: number
   muted?: boolean
-  updateVideoInstance?: (tmpContainer?: HTMLDivElement) => void
-  updateVideoInfo?: (
+  updateVideoInstance: (tmpContainer?: HTMLDivElement) => void
+  updateVideoInfo: (
     tmpVideoId?: string,
     tmpVideoName?: string,
     tmpStatus?: YT.PlayerState,
-    tmpCurrentTime?: number,
-    tmpDuration?: number,
+    tmpCurrTime?: number,
+    tmpTotalTime?: number,
     tmpVolumn?: number,
     tmpMuted?: boolean
   ) => void
-  updateVideoTime?: (tmpCurrentTime?: number) => void
+  updateVideoProgress: (currTime: number, totalTime: number) => void
+  // updateVideoTime?: (tmpCurrTime?: number) => void
 }
 
 export const PlayerContext = React.createContext({} as IPlayerContext)

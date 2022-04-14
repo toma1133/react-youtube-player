@@ -4,7 +4,8 @@ import './PlayerPanel.scss'
 
 const PlayerPanel = (): JSX.Element => {
   const playerContext = useContext(PlayerContext)
-  const { videoInstance, videoId, videoName, volumn } = playerContext
+  const { progress, totalTime, videoInstance, videoId, videoName, volumn } =
+    playerContext
 
   return (
     <div className="player-panel-container">
@@ -14,6 +15,18 @@ const PlayerPanel = (): JSX.Element => {
         src={`https://i.ytimg.com/vi_webp/${videoId}/mqdefault.webp`}
       ></img>
       <span>{videoName}</span>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        onChange={(event) => {
+          videoInstance?.seekTo(
+            totalTime * (Number.parseInt(event.target.value) / 100),
+            true
+          )
+        }}
+        value={progress}
+      ></input>
       <button>Prev</button>
       <button
         onClick={() => {

@@ -9,8 +9,9 @@ const Player = (): JSX.Element => {
   const [videoId, setVideoId] = useState<string | undefined>()
   const [videoName, setVideoName] = useState<string | undefined>()
   const [status, setStatus] = useState<YT.PlayerState | undefined>()
-  const [currentTime, setCurrentTime] = useState<number | undefined>()
-  const [duration, setDuration] = useState<number | undefined>()
+  const [currTime, setCurrTime] = useState<number>(0)
+  const [totalTime, setTotalTime] = useState<number>(0)
+  const [progress, setProgress] = useState<number>(0)
   const [volumn, setVolumn] = useState<number | undefined>()
   const [muted, setMuted] = useState<boolean | undefined>()
 
@@ -21,24 +22,6 @@ const Player = (): JSX.Element => {
       }
     }
   }, [videoInstance])
-
-  const updateVideoInfo = (
-    tmpVideoId?: string,
-    tmpVideoName?: string,
-    tmpStatus?: YT.PlayerState,
-    tmpCurrentTime?: number,
-    tmpDuration?: number,
-    tmpVolumn?: number,
-    tmpMuted?: boolean
-  ): void => {
-    if (tmpVideoId !== undefined) setVideoId(() => tmpVideoId)
-    if (tmpVideoName !== undefined) setVideoName(() => tmpVideoName)
-    if (tmpStatus !== undefined) setStatus(() => tmpStatus)
-    if (tmpCurrentTime !== undefined) setCurrentTime(() => tmpCurrentTime)
-    if (tmpDuration !== undefined) setDuration(() => tmpDuration)
-    if (tmpVolumn !== undefined) setVolumn(() => tmpVolumn)
-    if (tmpMuted !== undefined) setMuted(() => tmpMuted)
-  }
 
   const updateVideoInstance = (tmpContainer?: HTMLDivElement): void => {
     if (tmpContainer) {
@@ -77,6 +60,29 @@ const Player = (): JSX.Element => {
     }
   }
 
+  const updateVideoInfo = (
+    tmpVideoId?: string,
+    tmpVideoName?: string,
+    tmpStatus?: YT.PlayerState,
+    tmpCurrTime?: number,
+    tmpTotalTime?: number,
+    tmpVolumn?: number,
+    tmpMuted?: boolean
+  ): void => {
+    if (tmpVideoId !== undefined) setVideoId(() => tmpVideoId)
+    if (tmpVideoName !== undefined) setVideoName(() => tmpVideoName)
+    if (tmpStatus !== undefined) setStatus(() => tmpStatus)
+    if (tmpCurrTime !== undefined) setCurrTime(() => tmpCurrTime)
+    if (tmpTotalTime !== undefined) setTotalTime(() => tmpTotalTime)
+    if (tmpVolumn !== undefined) setVolumn(() => tmpVolumn)
+    if (tmpMuted !== undefined) setMuted(() => tmpMuted)
+  }
+
+  const updateVideoProgress = (currTime: number, totalTime: number): void => {
+    if (currTime !== undefined && totalTime !== undefined && totalTime !== 0)
+      setProgress(() => (currTime / totalTime) * 100)
+  }
+
   return (
     <PlayerContext.Provider
       value={{
@@ -84,12 +90,14 @@ const Player = (): JSX.Element => {
         videoId,
         videoName,
         status,
-        currentTime,
-        duration,
+        currTime,
+        totalTime,
+        progress,
         volumn,
         muted,
         updateVideoInstance,
         updateVideoInfo,
+        updateVideoProgress,
         // updateVideoTime,
       }}
     >

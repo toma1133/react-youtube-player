@@ -4,8 +4,15 @@ import { IPlayerEvent, PlayerContext } from '../Player/PlayerContext'
 const IFramePlayer = (): JSX.Element => {
   const playerContainer = useRef<HTMLDivElement | null>(null)
   const playerContext = useContext(PlayerContext)
-  const { videoInstance, videoId, updateVideoInstance, updateVideoInfo } =
-    playerContext
+  const {
+    currTime,
+    totalTime,
+    videoInstance,
+    videoId,
+    updateVideoInstance,
+    updateVideoInfo,
+    updateVideoProgress,
+  } = playerContext
 
   const onIframeMessageEvent = useCallback(
     (event: MessageEvent) => {
@@ -60,6 +67,10 @@ const IFramePlayer = (): JSX.Element => {
 
     window.onYouTubeIframeAPIReady = onIframeApiReady
   }, [onIframeApiReady])
+
+  useEffect(() => {
+    updateVideoProgress(currTime, totalTime)
+  }, [currTime, totalTime, updateVideoProgress])
 
   useEffect(() => {
     if (videoInstance && videoId)
