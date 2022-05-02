@@ -21,6 +21,13 @@ const PopularList = (): JSX.Element => {
       >
         Bad Habits
       </button>
+      <button
+        onClick={() => {
+          if (updateVideoInfo) updateVideoInfo('Y2ge3KrdeWs')
+        }}
+      >
+        華語
+      </button>
     </>
   )
 }

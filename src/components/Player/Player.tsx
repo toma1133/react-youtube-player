@@ -12,7 +12,7 @@ const Player = (): JSX.Element => {
   const [currTime, setCurrTime] = useState<number>(0)
   const [totalTime, setTotalTime] = useState<number>(0)
   const [progress, setProgress] = useState<number>(0)
-  const [volumn, setVolumn] = useState<number | undefined>()
+  const [volumn, setVolumn] = useState<number>(50)
   const [muted, setMuted] = useState<boolean | undefined>()
 
   useEffect(() => {

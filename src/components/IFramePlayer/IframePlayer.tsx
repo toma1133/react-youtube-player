@@ -1,5 +1,10 @@
 import { useCallback, useContext, useEffect, useRef } from 'react'
+import styled from 'styled-components'
 import { IPlayerEvent, PlayerContext } from '../Player/PlayerContext'
+
+const IframeContainer = styled.div`
+  display: none;
+`
 
 const IFramePlayer = (): JSX.Element => {
   const playerContainer = useRef<HTMLDivElement | null>(null)
@@ -77,7 +82,7 @@ const IFramePlayer = (): JSX.Element => {
       videoInstance?.loadVideoById(videoId?.toString())
   }, [videoId, videoInstance])
 
-  return <div ref={playerContainer}></div>
+  return <IframeContainer ref={playerContainer}></IframeContainer>
 }
 
 export default IFramePlayer

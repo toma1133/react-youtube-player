@@ -61,7 +61,7 @@ export interface IPlayerContext {
   currTime: number
   totalTime: number
   progress: number
-  volumn?: number
+  volumn: number
   muted?: boolean
   updateVideoInstance: (tmpContainer?: HTMLDivElement) => void
   updateVideoInfo: (
