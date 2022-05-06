@@ -7,18 +7,21 @@ import {
   faCirclePlay,
 } from '@fortawesome/free-regular-svg-icons'
 import { parseTitleString } from '../../services/common.service'
-import { PlayerContext } from '../Player/PlayerContext'
 import {
   faBackwardStep,
   faForwardStep,
+  faRepeat,
+  faShuffle,
   faVolumeHigh,
   faVolumeLow,
   faVolumeOff,
   faVolumeXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
+import { PlayerContext } from '../../interfaces/PlayerContext'
 
 const PlayerPanelContainer = styled.div`
+  background: #fff;
   display: flex;
   flex-direction: row;
   position: fixed;
@@ -34,7 +37,7 @@ const PlayerInfo = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 40%;
+  width: 35%;
 `
 
 const PlayerCover = styled.div`
@@ -73,22 +76,29 @@ const PlayerSonfInfoArtist = styled.h5`
 const PlayerControl = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  width: 15%;
+  width: 100%;
 `
 
-const PlayerControlBtn = styled.button`
-  margin: 0px 5px;
-`
+const PlayerControlBtn = styled.button``
 
 const PlayerSlider = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  text-align: center;
+  width: 45%;
+`
+
+const PlayerSliderInfo = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 30%;
+  width: 100%;
 `
 
 const PlayerSliderLabel = styled.span`
@@ -105,8 +115,13 @@ const PlayerVolumnSlider = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 15%;
+  width: 20%;
   padding: 2%;
+`
+
+const PlayerVolumnBtn = styled.button`
+  float: left;
+  width: 64px;
 `
 
 const PlayerVolumnSliderControl = styled.input`
@@ -139,10 +154,14 @@ const PlayerPanel = (): JSX.Element => {
     <PlayerPanelContainer>
       <PlayerInfo>
         <PlayerCover>
-          <PlayerCoverImg
-            alt={videoName}
-            src={`https://i.ytimg.com/vi_webp/${videoId}/mqdefault.webp`}
-          />
+          {videoId ? (
+            <PlayerCoverImg
+              alt={videoName}
+              src={`https://i.ytimg.com/vi_webp/${videoId}/mqdefault.webp`}
+            />
+          ) : (
+            <></>
+          )}
         </PlayerCover>
         <PlayerSongInfo>
           <PlayerSonfInfoTitle>
@@ -153,104 +172,98 @@ const PlayerPanel = (): JSX.Element => {
           </PlayerSonfInfoArtist>
         </PlayerSongInfo>
       </PlayerInfo>
-      <PlayerControl>
-        <PlayerControlBtn disabled={true}>
-          <FontAwesomeIcon icon={faBackwardStep} size={'2x'} />
-        </PlayerControlBtn>
-        {status === 1 ? (
-          <PlayerControlBtn
-            onClick={() => {
-              videoInstance?.pauseVideo()
-            }}
-          >
-            <FontAwesomeIcon icon={faCirclePause} size={'2x'} />
+      <PlayerSlider>
+        <PlayerControl>
+          <PlayerControlBtn disabled={true}>
+            <FontAwesomeIcon icon={faShuffle} size={'lg'} />
           </PlayerControlBtn>
-        ) : (
-          <PlayerControlBtn
-            onClick={() => {
-              videoInstance?.playVideo()
-            }}
-          >
-            <FontAwesomeIcon icon={faCirclePlay} size={'2x'} />
+          <PlayerControlBtn disabled={true}>
+            <FontAwesomeIcon icon={faBackwardStep} size={'lg'} />
           </PlayerControlBtn>
-        )}
-        {/* <button
+          {status === 1 ? (
+            <PlayerControlBtn
+              onClick={() => {
+                videoInstance?.pauseVideo()
+              }}
+            >
+              <FontAwesomeIcon icon={faCirclePause} size={'lg'} />
+            </PlayerControlBtn>
+          ) : (
+            <PlayerControlBtn
+              onClick={() => {
+                videoInstance?.playVideo()
+              }}
+            >
+              <FontAwesomeIcon icon={faCirclePlay} size={'lg'} />
+            </PlayerControlBtn>
+          )}
+          {/* <button
           onClick={() => {
             videoInstance?.stopVideo()
           }}
         >
-          <FontAwesomeIcon icon={faCircleStop} size={'2x'} />
+          <FontAwesomeIcon icon={faCircleStop} size={'lg'} />
         </button> */}
-        <PlayerControlBtn disabled={true}>
-          <FontAwesomeIcon icon={faForwardStep} size={'2x'} />
-        </PlayerControlBtn>
-      </PlayerControl>
-      <PlayerSlider>
-        <PlayerSliderLabel>
-          {moment.duration(currTime * 1000).hours() === 0
-            ? ''
-            : `${moment.utc(currTime * 1000).format('HH')}:`}
-          {`${moment.utc(currTime * 1000).format('mm')}:`}
-          {moment.utc(currTime * 1000).format('ss')}
-        </PlayerSliderLabel>
-        <PlayerSliderControl
-          type="range"
-          min="0"
-          max="100"
-          onChange={(event) => {
-            videoInstance?.seekTo(
-              totalTime * (Number.parseInt(event.target.value) / 100),
-              true
-            )
-          }}
-          value={progress}
-        ></PlayerSliderControl>
-        <PlayerSliderLabel>
-          {moment.duration(totalTime * 1000).hours() === 0
-            ? ''
-            : `${moment.utc(totalTime * 1000).format('HH')}:`}
-          {`${moment.utc(totalTime * 1000).format('mm')}:`}
-          {moment.utc(totalTime * 1000).format('ss')}
-        </PlayerSliderLabel>
+          <PlayerControlBtn disabled={true}>
+            <FontAwesomeIcon icon={faForwardStep} size={'lg'} />
+          </PlayerControlBtn>
+          <PlayerControlBtn disabled={true}>
+            <FontAwesomeIcon icon={faRepeat} size={'lg'} />
+          </PlayerControlBtn>
+        </PlayerControl>
+        <PlayerSliderInfo>
+          <PlayerSliderLabel>
+            {moment.duration(currTime * 1000).hours() === 0
+              ? ''
+              : `${moment.utc(currTime * 1000).format('HH')}:`}
+            {`${moment.utc(currTime * 1000).format('mm')}:`}
+            {moment.utc(currTime * 1000).format('ss')}
+          </PlayerSliderLabel>
+          <PlayerSliderControl
+            type="range"
+            min="0"
+            max="100"
+            onChange={(event) => {
+              videoInstance?.seekTo(
+                totalTime * (Number.parseInt(event.target.value) / 100),
+                true
+              )
+            }}
+            value={progress}
+          ></PlayerSliderControl>
+          <PlayerSliderLabel>
+            {moment.duration(totalTime * 1000).hours() === 0
+              ? ''
+              : `${moment.utc(totalTime * 1000).format('HH')}:`}
+            {`${moment.utc(totalTime * 1000).format('mm')}:`}
+            {moment.utc(totalTime * 1000).format('ss')}
+          </PlayerSliderLabel>
+        </PlayerSliderInfo>
       </PlayerSlider>
       <PlayerVolumnSlider>
         {muted ? (
-          <PlayerControlBtn
+          <PlayerVolumnBtn
             onClick={() => {
               videoInstance?.unMute()
             }}
           >
             <FontAwesomeIcon
               icon={getPlayerVolumnIcon(volumn, muted)}
-              size={'2x'}
+              size={'lg'}
             />
-          </PlayerControlBtn>
+          </PlayerVolumnBtn>
         ) : (
-          <PlayerControlBtn
+          <PlayerVolumnBtn
             onClick={() => {
               videoInstance?.mute()
             }}
           >
             <FontAwesomeIcon
               icon={getPlayerVolumnIcon(volumn, muted)}
-              size={'2x'}
+              size={'lg'}
             />
-          </PlayerControlBtn>
+          </PlayerVolumnBtn>
         )}
-        {/* <button
-          onClick={() => {
-            if (volumn !== undefined) videoInstance?.setVolume(volumn - 5)
-          }}
-        >
-          Volumn-
-        </button>
-        <button
-          onClick={() => {
-            if (volumn !== undefined) videoInstance?.setVolume(volumn + 5)
-          }}
-        >
-          Volumn+
-        </button> */}
         <PlayerVolumnSliderControl
           type="range"
           min="0"

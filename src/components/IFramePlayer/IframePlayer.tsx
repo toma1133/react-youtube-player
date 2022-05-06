@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import { IPlayerEvent, PlayerContext } from '../Player/PlayerContext'
+import { IPlayerEvent, PlayerContext } from '../../interfaces/PlayerContext'
 
 const IframeContainer = styled.div`
   display: none;

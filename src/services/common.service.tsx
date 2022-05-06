@@ -21,6 +21,8 @@ export const parseTitleString = (target?: string): IMusicInfo => {
     '(lyrics)',
     '[ official video ]',
     '[official music video]',
+    '[Official Audio]',
+    '(Official Audio)',
     '[free download]',
     '[free dl]',
     '( 1080p )',
@@ -45,21 +47,19 @@ export const parseTitleString = (target?: string): IMusicInfo => {
     '[enm release]',
     '[free download!]',
     '[monstercat free release]',
-    '(Official Music Video﻿)',
-    'Official Music Video',
-    '電影主題曲',
-    '電視劇',
-    '/《(.*)》',
   ]
+
   let artist: string,
     title: string,
     credits: string[] = []
+
   let targetStr = target || ''
 
   baddies.forEach((token) => {
     targetStr = targetStr.replace(token + ' - ', '').trim()
     targetStr = targetStr.replace(token.toUpperCase() + ' - ', '').trim()
     targetStr = targetStr.replace(token.toLowerCase() + ' - ', '').trim()
+
     targetStr = targetStr.replace(token, '').trim()
     targetStr = targetStr.replace(token.toUpperCase(), '').trim()
     targetStr = targetStr.replace(token.toLowerCase(), '').trim()
